@@ -1,0 +1,16 @@
+# Pinned to versions that officially support Python 3.13 (Django 5.0 does
+# NOT support 3.13 - only 5.1+ does; 5.2 is the current LTS, so we use that).
+Django==5.2.8
+djangorestframework==3.16.0
+django-cors-headers==4.4.0
+django-filter==24.3
+python-dotenv==1.0.1
+requests==2.32.3
+gunicorn==23.0.0
+opentelemetry-api==1.27.0
+opentelemetry-sdk==1.27.0
+opentelemetry-exporter-otlp-proto-grpc==1.27.0
+opentelemetry-instrumentation-django==0.48b0
+opentelemetry-instrumentation-requests==0.48b0
+pytest==8.3.3
+pytest-django==4.9.0

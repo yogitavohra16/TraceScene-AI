@@ -1,0 +1,54 @@
+# App stack: backend + frontend + demo-app (Section 40).
+# Run alongside docker-compose.signoz.yml (kept separate, matching
+# SigNoz's own official compose pattern) - see README Quick Start.
+name: tracescene-ai
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:                    
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://signoz-ingester-1:4317
+    volumes:
+      - backend-db:/app/data
+    networks:
+      - tracescene-net
+      - signoz-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    networks:
+      - tracescene-net
+
+  demo-app:
+    build: ./demo-app
+    ports:
+      - "5001:5001"
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+      BREAK_PAYMENTS: "0"
+    networks:
+      - tracescene-net
+      - signoz-network
+
+networks:
+  tracescene-net:
+    driver: bridge
+  # References the network created by docker-compose.signoz.yml so the
+  # backend's SIGNOZ_BASE_URL and the demo app's OTLP endpoint resolve via
+  # Docker DNS (Section 40). Start docker-compose.signoz.yml first.
+  signoz-network:
+    external: true
+    name: signoz-network
+
+volumes:
+  backend-db:

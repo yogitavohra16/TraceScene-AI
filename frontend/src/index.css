@@ -1,0 +1,77 @@
+/*
+ * Global design tokens (PRD Section 14 - Color Palette) and the small set
+ * of custom keyframes referenced from tailwind.config.js (Section 17).
+ * Every color used anywhere in the app should trace back to one of these
+ * custom properties, never a raw hex value in a component.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0b0e14;
+  --bg-surface: #131722;
+  --bg-surface-elevated: #1b2030;
+  --border-subtle: #242a3b;
+  --text-primary: #e6e9f0;
+  --text-secondary: #9aa3b8;
+  --accent-primary: #5b8cff;
+  --accent-primary-hover: #6f9cff;
+  --severity-low: #4cc9a0;
+  --severity-medium: #f2c94c;
+  --severity-high: #f2994a;
+  --severity-critical: #eb5757;
+  --confidence-low: #eb5757;
+  --confidence-medium: #f2c94c;
+  --confidence-high: #4cc9a0;
+  --status-open: #5b8cff;
+  --status-investigating: #f2c94c;
+  --status-closed: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Timeline connector draw-in (Section 17) */
+.draw-line {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: draw-line 400ms ease-out forwards;
+}
+@keyframes draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-surface-elevated) 37%, var(--bg-surface) 63%);
+  background-size: 400px 100%;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 6px;
+}
