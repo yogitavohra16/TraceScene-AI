@@ -9,7 +9,7 @@ class ServiceErrorMixin:
     through the generic DRF exception handler."""
 
     def error_response(
-        self, code: str, message: str, status_code: int, field: str = None
+        self, code: str, message: str, status_code: int, field: str | None = None
     ) -> Response:
         return Response(
             {"error": {"code": code, "message": message, "field": field}},

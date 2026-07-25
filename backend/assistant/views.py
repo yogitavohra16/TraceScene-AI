@@ -48,25 +48,31 @@ class CaseAssistantQueryView(APIView):
     def _answer(self, question: str, context: list[dict], case: Case):
         if "changed" in question or "before" in question:
             earliest = context[0]
-            return (
+        return (
+            (
                 f"The earliest notable event was a {earliest['source_type']} at {earliest['timestamp']}: "
-                f"{earliest['summary']} (evidence #{earliest['evidence_id']}, score {earliest['score']:.0f}).",
-                [earliest["evidence_id"]],
-            )
+                f"{earliest['summary']} (evidence #{earliest['evidence_id']}, score {earliest['score']:.0f})."
+            ),
+            [earliest["evidence_id"]],
+        )
 
         if "confidence" in question:
             finding = getattr(case, "finding", None)
             if not finding:
                 return "No finding has been generated yet.", []
-            return (
+        return (
+            (
                 f"Current confidence is {finding.confidence_score:.0f}%, based on "
-                f"{len(finding.supporting_evidence_ids)} supporting evidence item(s).",
-                finding.supporting_evidence_ids,
-            )
+                f"{len(finding.supporting_evidence_ids)} supporting evidence item(s)."
+            ),
+            finding.supporting_evidence_ids,
+        )
 
         top = max(context, key=lambda item: item["score"])
         return (
-            f"The strongest signal so far is a {top['source_type']} event: {top['summary']} "
-            f"(evidence #{top['evidence_id']}, score {top['score']:.0f}).",
+            (
+                f"The strongest signal so far is a {top['source_type']} event: {top['summary']} "
+                f"(evidence #{top['evidence_id']}, score {top['score']:.0f})."
+            ),
             [top["evidence_id"]],
         )

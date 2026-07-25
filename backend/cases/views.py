@@ -9,14 +9,13 @@ off the CorrelationEngine after a Case is created).
 
 import django_filters
 from django.utils import timezone
-from rest_framework import filters, generics, status, viewsets
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from evidence.correlation import CorrelationEngine
-from findings.scoring import FindingGenerator
 
-from .models import Case, Note
+from .models import Case
 from .serializers import (
     CaseCloseSerializer,
     CaseCreateSerializer,

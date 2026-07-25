@@ -10,7 +10,7 @@ from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
-from integrations.otel_setup import setup_otel  # noqa: E402
+from integrations.otel_setup import setup_otel
 
 setup_otel()
 

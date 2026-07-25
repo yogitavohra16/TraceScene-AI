@@ -28,6 +28,7 @@ def setup_otel() -> None:
     try:
         from django.conf import settings
         from opentelemetry import trace
+        from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 
         # Trace imports
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
@@ -35,14 +36,13 @@ def setup_otel() -> None:
         )
         from opentelemetry.instrumentation.django import DjangoInstrumentor
         from opentelemetry.instrumentation.requests import RequestsInstrumentor
-        from opentelemetry.sdk.resources import SERVICE_NAME, Resource
-        from opentelemetry.sdk.trace import TracerProvider
-        from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
         # Log imports
         from opentelemetry.sdk._logs import LoggerProvider, LoggingHandler
         from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
-        from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
+        from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
         resource = Resource(attributes={SERVICE_NAME: settings.OTEL_SERVICE_NAME})
 

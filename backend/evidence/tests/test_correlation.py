@@ -1,9 +1,9 @@
 """Unit tests for the correlation scoring math (Section 45 - 80%+ target on
 evidence/ app)."""
 
-from datetime import datetime, timedelta, timezone as dt_timezone
+from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from cases.models import Case

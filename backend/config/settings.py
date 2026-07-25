@@ -140,9 +140,9 @@ CORS_ALLOWED_ORIGINS = env_list("CORS_ALLOWED_ORIGINS", "http://localhost:5173")
 SIGNOZ_BASE_URL = os.environ.get("SIGNOZ_BASE_URL", "http://localhost:3301")
 SIGNOZ_API_KEY = os.environ.get("SIGNOZ_API_KEY", "")
 SIGNOZ_WEBHOOK_SECRET = os.environ.get("SIGNOZ_WEBHOOK_SECRET", "")
-CORRELATION_WINDOW_BEFORE_MIN = int(os.environ.get("CORRELATION_WINDOW_BEFORE_MIN", 10))
-CORRELATION_WINDOW_AFTER_MIN = int(os.environ.get("CORRELATION_WINDOW_AFTER_MIN", 5))
-MIN_CORRELATION_SCORE = float(os.environ.get("MIN_CORRELATION_SCORE", 30))
+CORRELATION_WINDOW_BEFORE_MIN = int(os.environ.get("CORRELATION_WINDOW_BEFORE_MIN", "10"))
+CORRELATION_WINDOW_AFTER_MIN = int(os.environ.get("CORRELATION_WINDOW_AFTER_MIN", "5"))
+MIN_CORRELATION_SCORE = float(os.environ.get("MIN_CORRELATION_SCORE", "30"))
 
 # --- OpenTelemetry (Section 26, dogfooding NFR from Section 7) ---
 OTEL_EXPORTER_OTLP_ENDPOINT = os.environ.get(

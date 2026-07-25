@@ -72,9 +72,7 @@ class CorrelationEngine:
             try:
                 self.run()
                 return
-            except (
-                Exception
-            ):  # noqa: BLE001 - correlation must never crash the request thread
+            except Exception:
                 attempt += 1
                 logger.exception(
                     "Correlation attempt %s/%s failed for case #%s",
@@ -92,10 +90,9 @@ class CorrelationEngine:
     def run(self) -> list:
         """Synchronously fetches, scores, and persists Evidence. Returns the
         list of persisted Evidence rows. Safe to call directly in tests."""
-        from integrations.signoz_client import SigNozClient
-
         from cases.models import Case
         from findings.scoring import FindingGenerator
+        from integrations.signoz_client import SigNozClient
 
         from .timeline import TimelineBuilder
 
