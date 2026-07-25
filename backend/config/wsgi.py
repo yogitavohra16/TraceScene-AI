@@ -3,6 +3,7 @@ WSGI entrypoint. OpenTelemetry is initialized here (before the Django app
 object is created) so every request handled by gunicorn/runserver is traced
 from the very first request (Section 26).
 """
+
 import os
 
 from django.core.wsgi import get_wsgi_application

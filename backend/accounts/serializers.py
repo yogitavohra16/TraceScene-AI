@@ -1,4 +1,5 @@
 """Serializers for the login endpoint's request/response shape."""
+
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 

@@ -6,6 +6,7 @@ so this is intentionally a thin pass-through today. It exists as its own
 module now so adding Viewer/Investigator/Admin checks later doesn't require
 touching views.py (Appendix A: single responsibility).
 """
+
 from rest_framework.permissions import BasePermission
 
 

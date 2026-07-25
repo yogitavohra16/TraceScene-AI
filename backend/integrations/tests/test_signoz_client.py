@@ -1,4 +1,5 @@
 """Tests for SigNozClient's demo fallback path (Section 45)."""
+
 from datetime import datetime, timezone
 
 from django.test import TestCase

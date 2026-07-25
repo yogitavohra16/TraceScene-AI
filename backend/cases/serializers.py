@@ -1,4 +1,5 @@
 """Serializers for Case and Note (Section 23 request/response examples)."""
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
@@ -36,8 +37,17 @@ class CaseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Case
         fields = [
-            "id", "title", "service", "severity", "status", "linked_alert_id",
-            "assigned_to", "created_at", "updated_at", "evidence_count", "confidence_score",
+            "id",
+            "title",
+            "service",
+            "severity",
+            "status",
+            "linked_alert_id",
+            "assigned_to",
+            "created_at",
+            "updated_at",
+            "evidence_count",
+            "confidence_score",
         ]
 
     def get_confidence_score(self, obj):
@@ -56,9 +66,21 @@ class CaseDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Case
         fields = [
-            "id", "title", "description", "service", "severity", "status",
-            "linked_alert_id", "assigned_to", "created_at", "updated_at",
-            "closed_at", "resolution_summary", "needs_review", "evidence_count", "finding",
+            "id",
+            "title",
+            "description",
+            "service",
+            "severity",
+            "status",
+            "linked_alert_id",
+            "assigned_to",
+            "created_at",
+            "updated_at",
+            "closed_at",
+            "resolution_summary",
+            "needs_review",
+            "evidence_count",
+            "finding",
         ]
 
     def get_finding(self, obj):
@@ -77,7 +99,14 @@ class CaseCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Case
-        fields = ["id", "title", "description", "service", "severity", "linked_alert_id"]
+        fields = [
+            "id",
+            "title",
+            "description",
+            "service",
+            "severity",
+            "linked_alert_id",
+        ]
 
 
 class CaseUpdateSerializer(serializers.ModelSerializer):

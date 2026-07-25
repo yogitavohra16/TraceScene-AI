@@ -5,6 +5,7 @@ This file wires together every app in Section 20 of the PRD and reads all
 tunable values (SigNoz connection, correlation thresholds, OTel target) from
 environment variables per Section 37, so nothing sensitive is hardcoded.
 """
+
 import os
 from pathlib import Path
 
@@ -19,7 +20,11 @@ def env_bool(name: str, default: bool) -> bool:
 
 
 def env_list(name: str, default: str) -> list:
-    return [item.strip() for item in os.environ.get(name, default).split(",") if item.strip()]
+    return [
+        item.strip()
+        for item in os.environ.get(name, default).split(",")
+        if item.strip()
+    ]
 
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "insecure-dev-key-change-me")
@@ -56,7 +61,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -90,7 +94,9 @@ DATABASES = {
 }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -139,7 +145,9 @@ CORRELATION_WINDOW_AFTER_MIN = int(os.environ.get("CORRELATION_WINDOW_AFTER_MIN"
 MIN_CORRELATION_SCORE = float(os.environ.get("MIN_CORRELATION_SCORE", 30))
 
 # --- OpenTelemetry (Section 26, dogfooding NFR from Section 7) ---
-OTEL_EXPORTER_OTLP_ENDPOINT = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
+OTEL_EXPORTER_OTLP_ENDPOINT = os.environ.get(
+    "OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317"
+)
 OTEL_SERVICE_NAME = os.environ.get("OTEL_SERVICE_NAME", "tracescene-backend")
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")

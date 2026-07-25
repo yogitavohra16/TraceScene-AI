@@ -2,6 +2,7 @@
 Root URL configuration. Every route here maps 1:1 to Section 22 of the PRD;
 each app owns its own urls.py so the mapping is easy to audit per app.
 """
+
 from django.contrib import admin
 from django.urls import include, path
 

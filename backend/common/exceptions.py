@@ -9,6 +9,7 @@ error shape documented in Section 23 of the PRD:
 This keeps the frontend's error handling (ToastContext) simple - it only
 ever has to read `response.data.error.message`.
 """
+
 from rest_framework.views import exception_handler
 
 

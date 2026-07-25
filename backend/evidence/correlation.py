@@ -19,6 +19,7 @@ Common beginner mistake this avoids: scoring purely on time proximity would
 surface unrelated noisy logs from the same second. Weighting service/trace
 match keeps the signal dense (Section 29).
 """
+
 from __future__ import annotations
 
 import logging
@@ -71,14 +72,22 @@ class CorrelationEngine:
             try:
                 self.run()
                 return
-            except Exception:  # noqa: BLE001 - correlation must never crash the request thread
+            except (
+                Exception
+            ):  # noqa: BLE001 - correlation must never crash the request thread
                 attempt += 1
                 logger.exception(
-                    "Correlation attempt %s/%s failed for case #%s", attempt, MAX_RETRIES, self.case.id
+                    "Correlation attempt %s/%s failed for case #%s",
+                    attempt,
+                    MAX_RETRIES,
+                    self.case.id,
                 )
             finally:
                 close_old_connections()
-        logger.error("Correlation exhausted retries for case #%s - marked incomplete.", self.case.id)
+        logger.error(
+            "Correlation exhausted retries for case #%s - marked incomplete.",
+            self.case.id,
+        )
 
     def run(self) -> list:
         """Synchronously fetches, scores, and persists Evidence. Returns the
@@ -96,8 +105,12 @@ class CorrelationEngine:
             case.save(update_fields=["status"])
 
         trigger_time = self._trigger_time()
-        window_start = trigger_time - timedelta(minutes=settings.CORRELATION_WINDOW_BEFORE_MIN)
-        window_end = trigger_time + timedelta(minutes=settings.CORRELATION_WINDOW_AFTER_MIN)
+        window_start = trigger_time - timedelta(
+            minutes=settings.CORRELATION_WINDOW_BEFORE_MIN
+        )
+        window_end = trigger_time + timedelta(
+            minutes=settings.CORRELATION_WINDOW_AFTER_MIN
+        )
 
         client = SigNozClient()
         raw_items = client.fetch_signals(
@@ -147,7 +160,9 @@ class CorrelationEngine:
     def score_item(item: dict, trigger_time, case) -> float:
         """Pure scoring function (kept static + side-effect free so it's
         directly unit-testable per Section 45)."""
-        time_proximity = CorrelationEngine._time_proximity_score(item["event_timestamp"], trigger_time)
+        time_proximity = CorrelationEngine._time_proximity_score(
+            item["event_timestamp"], trigger_time
+        )
         service_match = 100.0 if item.get("service_name") == case.service.name else 40.0
         trace_id_match = 100.0 if item.get("metadata", {}).get("trace_id") else 0.0
         severity_signal = CorrelationEngine._severity_signal_score(item)

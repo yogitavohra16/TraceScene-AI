@@ -7,18 +7,31 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='SignozConnectionSettings',
+            name="SignozConnectionSettings",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('base_url', models.CharField(default='http://localhost:3301', max_length=255)),
-                ('api_key', models.CharField(blank=True, default='', max_length=255)),
-                ('webhook_secret', models.CharField(blank=True, default='', max_length=255)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "base_url",
+                    models.CharField(default="http://localhost:3301", max_length=255),
+                ),
+                ("api_key", models.CharField(blank=True, default="", max_length=255)),
+                (
+                    "webhook_secret",
+                    models.CharField(blank=True, default="", max_length=255),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
     ]

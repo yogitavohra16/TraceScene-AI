@@ -7,6 +7,7 @@ the CorrelationEngine. Per Section 33's error-handling rules, a malformed
 payload is logged with its raw body and still creates a minimal Case
 flagged `needs_review` - alerts are never silently dropped.
 """
+
 import logging
 
 from rest_framework.permissions import AllowAny
@@ -33,9 +34,18 @@ class SignozWebhookView(APIView):
 
         connection_settings = SignozConnectionSettings.load()
         provided_secret = request.headers.get("X-Signoz-Webhook-Secret", "")
-        if connection_settings.webhook_secret and provided_secret != connection_settings.webhook_secret:
+        if (
+            connection_settings.webhook_secret
+            and provided_secret != connection_settings.webhook_secret
+        ):
             return Response(
-                {"error": {"code": "invalid_secret", "message": "Webhook secret did not match.", "field": None}},
+                {
+                    "error": {
+                        "code": "invalid_secret",
+                        "message": "Webhook secret did not match.",
+                        "field": None,
+                    }
+                },
                 status=401,
             )
 
@@ -46,7 +56,10 @@ class SignozWebhookView(APIView):
             case = self._create_minimal_case(payload)
 
         CorrelationEngine(case).run_async()
-        return Response({"case_id": case.id, "status": case.status, "correlation_job": "queued"}, status=202)
+        return Response(
+            {"case_id": case.id, "status": case.status, "correlation_job": "queued"},
+            status=202,
+        )
 
     def _create_case_from_payload(self, payload: dict) -> Case:
         service_name = payload["service"]

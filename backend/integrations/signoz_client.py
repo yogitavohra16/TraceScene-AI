@@ -19,6 +19,7 @@ product (correlation, timeline, finding) is always demoable even before
 SigNoz is wired up. This fallback is logged loudly so it's never mistaken
 for real telemetry.
 """
+
 from __future__ import annotations
 
 import logging
@@ -48,19 +49,32 @@ class SigNozClient:
         """Used by Settings -> "Test Connection" (Section 11.7 / 33)."""
         try:
             response = requests.get(
-                f"{self.base_url}/api/v1/health", headers=self._headers(), timeout=REQUEST_TIMEOUT_SECONDS
+                f"{self.base_url}/api/v1/health",
+                headers=self._headers(),
+                timeout=REQUEST_TIMEOUT_SECONDS,
             )
             if response.status_code == 401:
-                return {"ok": False, "message": "Authentication failed - check the SigNoz API key."}
+                return {
+                    "ok": False,
+                    "message": "Authentication failed - check the SigNoz API key.",
+                }
             if response.ok:
                 return {"ok": True, "message": "Connected to SigNoz successfully."}
-            return {"ok": False, "message": f"SigNoz responded with status {response.status_code}."}
+            return {
+                "ok": False,
+                "message": f"SigNoz responded with status {response.status_code}.",
+            }
         except requests.exceptions.ConnectionError:
-            return {"ok": False, "message": "Could not reach SigNoz - check the base URL and that the stack is running."}
+            return {
+                "ok": False,
+                "message": "Could not reach SigNoz - check the base URL and that the stack is running.",
+            }
         except requests.exceptions.Timeout:
             return {"ok": False, "message": "Connection to SigNoz timed out."}
 
-    def fetch_signals(self, service_name: str, start: datetime, end: datetime) -> list[dict]:
+    def fetch_signals(
+        self, service_name: str, start: datetime, end: datetime
+    ) -> list[dict]:
         """Returns a flat list of raw signal dicts (logs/traces/metrics/
         deploys) for the given service + time window, in the shape
         CorrelationEngine expects:
@@ -79,7 +93,9 @@ class SigNozClient:
             )
             return self._fallback_signals(service_name, start, end)
 
-    def _fetch_from_signoz(self, service_name: str, start: datetime, end: datetime) -> list[dict]:
+    def _fetch_from_signoz(
+        self, service_name: str, start: datetime, end: datetime
+    ) -> list[dict]:
         """Queries SigNoz's Query Service API. Kept intentionally simple
         (one query endpoint, builder-query style) since the exact query
         builder JSON shape is the most likely thing to drift between SigNoz
@@ -118,7 +134,9 @@ class SigNozClient:
             )
         return normalized
 
-    def _fallback_signals(self, service_name: str, start: datetime, end: datetime) -> list[dict]:
+    def _fallback_signals(
+        self, service_name: str, start: datetime, end: datetime
+    ) -> list[dict]:
         """Deterministic demo evidence matching the "bad deploy" scenario in
         the PRD's Section 23 example + Section 52 demo storyboard, so the
         product is always demoable without a live SigNoz stack."""
@@ -138,7 +156,12 @@ class SigNozClient:
                 "source_ref": trace_id,
                 "event_timestamp": trigger + timedelta(seconds=9),
                 "raw_content": f"Slow trace: {service_name} -> payments-service (1.9s in payments span)",
-                "metadata": {"trace_id": trace_id, "span_count": 6, "duration_ms": 1900, "service_name": "payments-service"},
+                "metadata": {
+                    "trace_id": trace_id,
+                    "span_count": 6,
+                    "duration_ms": 1900,
+                    "service_name": "payments-service",
+                },
                 "service_name": service_name,
             },
             {

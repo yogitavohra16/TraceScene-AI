@@ -1,5 +1,6 @@
 """Unit tests for the correlation scoring math (Section 45 - 80%+ target on
 evidence/ app)."""
+
 from datetime import datetime, timedelta, timezone as dt_timezone
 
 from django.contrib.auth.models import User
@@ -13,7 +14,9 @@ from services.models import Service
 class ScoreItemTests(TestCase):
     def setUp(self):
         self.service = Service.objects.create(name="checkout-service")
-        self.case = Case.objects.create(title="Test", service=self.service, severity="high")
+        self.case = Case.objects.create(
+            title="Test", service=self.service, severity="high"
+        )
 
     def test_close_time_and_matching_service_scores_high(self):
         trigger_time = datetime(2026, 7, 20, 9, 10, 32, tzinfo=dt_timezone.utc)

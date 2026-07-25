@@ -10,6 +10,7 @@ Common beginner mistake this avoids (Section 26): forgetting
 `insecure=True` for local gRPC without TLS, which causes traces to silently
 fail to export with no obvious error.
 """
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,9 @@ def setup_otel() -> None:
         from opentelemetry import trace
 
         # Trace imports
-        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
+            OTLPSpanExporter,
+        )
         from opentelemetry.instrumentation.django import DjangoInstrumentor
         from opentelemetry.instrumentation.requests import RequestsInstrumentor
         from opentelemetry.sdk.resources import SERVICE_NAME, Resource
@@ -41,11 +44,7 @@ def setup_otel() -> None:
         from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
         from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
 
-        resource = Resource(
-            attributes={
-                SERVICE_NAME: settings.OTEL_SERVICE_NAME
-            }
-        )
+        resource = Resource(attributes={SERVICE_NAME: settings.OTEL_SERVICE_NAME})
 
         # -------------------------
         # Traces → SigNoz
@@ -53,36 +52,25 @@ def setup_otel() -> None:
         provider = TracerProvider(resource=resource)
 
         exporter = OTLPSpanExporter(
-            endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT,
-            insecure=True
+            endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT, insecure=True
         )
 
-        provider.add_span_processor(
-            BatchSpanProcessor(exporter)
-        )
+        provider.add_span_processor(BatchSpanProcessor(exporter))
 
         trace.set_tracer_provider(provider)
 
         # -------------------------
         # Logs → SigNoz
         # -------------------------
-        log_provider = LoggerProvider(
-            resource=resource
-        )
+        log_provider = LoggerProvider(resource=resource)
 
         log_exporter = OTLPLogExporter(
-            endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT,
-            insecure=True
+            endpoint=settings.OTEL_EXPORTER_OTLP_ENDPOINT, insecure=True
         )
 
-        log_provider.add_log_record_processor(
-            BatchLogRecordProcessor(log_exporter)
-        )
+        log_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
 
-        log_handler = LoggingHandler(
-            level=logging.INFO,
-            logger_provider=log_provider
-        )
+        log_handler = LoggingHandler(level=logging.INFO, logger_provider=log_provider)
 
         logging.getLogger().addHandler(log_handler)
         logging.getLogger().setLevel(logging.INFO)
@@ -96,10 +84,8 @@ def setup_otel() -> None:
         logger.info(
             "OpenTelemetry initialized: service.name=%s -> %s",
             settings.OTEL_SERVICE_NAME,
-            settings.OTEL_EXPORTER_OTLP_ENDPOINT
+            settings.OTEL_EXPORTER_OTLP_ENDPOINT,
         )
 
     except Exception:
-        logger.exception(
-            "OpenTelemetry setup failed - continuing without telemetry."
-        )
+        logger.exception("OpenTelemetry setup failed - continuing without telemetry.")

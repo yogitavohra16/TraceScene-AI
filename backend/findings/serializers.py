@@ -9,6 +9,12 @@ class FindingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Finding
         fields = [
-            "id", "case_id", "hypothesis", "confidence_score",
-            "supporting_evidence_ids", "status", "generated_at", "reviewed_at",
+            "id",
+            "case_id",
+            "hypothesis",
+            "confidence_score",
+            "supporting_evidence_ids",
+            "status",
+            "generated_at",
+            "reviewed_at",
         ]

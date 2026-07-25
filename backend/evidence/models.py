@@ -1,5 +1,6 @@
 """Evidence app: the raw logs/traces/metrics/deploys pulled from SigNoz and
 scored against a Case (Section 21 ERD - EVIDENCE entity)."""
+
 from django.db import models
 
 
@@ -16,7 +17,9 @@ class Evidence(models.Model):
         RELEVANT = "relevant", "Relevant"
         IRRELEVANT = "irrelevant", "Irrelevant"
 
-    case = models.ForeignKey("cases.Case", on_delete=models.CASCADE, related_name="evidence")
+    case = models.ForeignKey(
+        "cases.Case", on_delete=models.CASCADE, related_name="evidence"
+    )
     source_type = models.CharField(max_length=20, choices=SourceType.choices)
     # A stable reference to the underlying SigNoz record (log line id, trace
     # id, metric series name, etc). Used for de-duplication (Section 29).
@@ -25,7 +28,9 @@ class Evidence(models.Model):
     raw_content = models.TextField()
     metadata = models.JSONField(default=dict, blank=True)
     correlation_score = models.FloatField(default=0)
-    relevance = models.CharField(max_length=20, choices=Relevance.choices, default=Relevance.UNREVIEWED)
+    relevance = models.CharField(
+        max_length=20, choices=Relevance.choices, default=Relevance.UNREVIEWED
+    )
     fetched_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

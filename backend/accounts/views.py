@@ -6,6 +6,7 @@ and no list/detail semantics - using a ViewSet here would add router
 complexity for no benefit (Appendix A: "prefer the easier to understand
 option").
 """
+
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import AllowAny, IsAuthenticated

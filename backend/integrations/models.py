@@ -9,6 +9,7 @@ as a deviation in PROJECT_DECISIONS.md per Appendix A.
 A singleton row (id is always 1) is simplest for a single-tenant MVP -
 multi-tenant per-connection config is Post-MVP (Section 55).
 """
+
 from django.db import models
 
 

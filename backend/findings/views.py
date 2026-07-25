@@ -5,6 +5,7 @@ Finding views (Section 22):
   POST /api/v1/findings/{id}/accept/
   POST /api/v1/findings/{id}/reject/
 """
+
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.response import Response
@@ -22,7 +23,16 @@ class CaseFindingView(APIView):
         case = get_object_or_404(Case, pk=case_id)
         finding = getattr(case, "finding", None)
         if not finding:
-            return Response({"error": {"code": "not_found", "message": "Finding not yet generated.", "field": None}}, status=404)
+            return Response(
+                {
+                    "error": {
+                        "code": "not_found",
+                        "message": "Finding not yet generated.",
+                        "field": None,
+                    }
+                },
+                status=404,
+            )
         return Response(FindingSerializer(finding).data)
 
 
@@ -31,7 +41,16 @@ class CaseFindingRegenerateView(APIView):
         case = get_object_or_404(Case, pk=case_id)
         finding = FindingGenerator(case).generate()
         if not finding:
-            return Response({"error": {"code": "no_evidence", "message": "No evidence available to score yet.", "field": None}}, status=400)
+            return Response(
+                {
+                    "error": {
+                        "code": "no_evidence",
+                        "message": "No evidence available to score yet.",
+                        "field": None,
+                    }
+                },
+                status=400,
+            )
         return Response(FindingSerializer(finding).data)
 
 

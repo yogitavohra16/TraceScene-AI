@@ -3,6 +3,7 @@ SigNoz connection Settings views (Section 22/11.7):
     GET/PUT /api/v1/settings/signoz/
     POST    /api/v1/settings/signoz/test/
 """
+
 from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,7 +21,9 @@ class SignozConnectionSerializer(serializers.ModelSerializer):
 
 class SignozSettingsView(APIView):
     def get(self, request):
-        return Response(SignozConnectionSerializer(SignozConnectionSettings.load()).data)
+        return Response(
+            SignozConnectionSerializer(SignozConnectionSettings.load()).data
+        )
 
     def put(self, request):
         instance = SignozConnectionSettings.load()
@@ -33,6 +36,8 @@ class SignozSettingsView(APIView):
 class SignozTestConnectionView(APIView):
     def post(self, request):
         settings_row = SignozConnectionSettings.load()
-        client = SigNozClient(base_url=settings_row.base_url, api_key=settings_row.api_key)
+        client = SigNozClient(
+            base_url=settings_row.base_url, api_key=settings_row.api_key
+        )
         result = client.test_connection()
         return Response(result)

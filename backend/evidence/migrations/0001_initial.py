@@ -9,27 +9,67 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cases', '0001_initial'),
+        ("cases", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Evidence',
+            name="Evidence",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('source_type', models.CharField(choices=[('log', 'Log'), ('trace', 'Trace'), ('metric', 'Metric'), ('deploy', 'Deploy'), ('alert', 'Alert')], max_length=20)),
-                ('source_ref', models.CharField(max_length=255)),
-                ('event_timestamp', models.DateTimeField()),
-                ('raw_content', models.TextField()),
-                ('metadata', models.JSONField(blank=True, default=dict)),
-                ('correlation_score', models.FloatField(default=0)),
-                ('relevance', models.CharField(choices=[('unreviewed', 'Unreviewed'), ('relevant', 'Relevant'), ('irrelevant', 'Irrelevant')], default='unreviewed', max_length=20)),
-                ('fetched_at', models.DateTimeField(auto_now_add=True)),
-                ('case', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='evidence', to='cases.case')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "source_type",
+                    models.CharField(
+                        choices=[
+                            ("log", "Log"),
+                            ("trace", "Trace"),
+                            ("metric", "Metric"),
+                            ("deploy", "Deploy"),
+                            ("alert", "Alert"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("source_ref", models.CharField(max_length=255)),
+                ("event_timestamp", models.DateTimeField()),
+                ("raw_content", models.TextField()),
+                ("metadata", models.JSONField(blank=True, default=dict)),
+                ("correlation_score", models.FloatField(default=0)),
+                (
+                    "relevance",
+                    models.CharField(
+                        choices=[
+                            ("unreviewed", "Unreviewed"),
+                            ("relevant", "Relevant"),
+                            ("irrelevant", "Irrelevant"),
+                        ],
+                        default="unreviewed",
+                        max_length=20,
+                    ),
+                ),
+                ("fetched_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "case",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="evidence",
+                        to="cases.case",
+                    ),
+                ),
             ],
             options={
-                'ordering': ['event_timestamp'],
-                'unique_together': {('case', 'source_type', 'source_ref', 'event_timestamp')},
+                "ordering": ["event_timestamp"],
+                "unique_together": {
+                    ("case", "source_type", "source_ref", "event_timestamp")
+                },
             },
         ),
     ]

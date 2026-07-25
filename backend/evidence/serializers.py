@@ -7,10 +7,27 @@ class EvidenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evidence
         fields = [
-            "id", "case", "source_type", "source_ref", "event_timestamp",
-            "raw_content", "metadata", "correlation_score", "relevance", "fetched_at",
+            "id",
+            "case",
+            "source_type",
+            "source_ref",
+            "event_timestamp",
+            "raw_content",
+            "metadata",
+            "correlation_score",
+            "relevance",
+            "fetched_at",
         ]
-        read_only_fields = ["case", "source_type", "source_ref", "event_timestamp", "raw_content", "metadata", "correlation_score", "fetched_at"]
+        read_only_fields = [
+            "case",
+            "source_type",
+            "source_ref",
+            "event_timestamp",
+            "raw_content",
+            "metadata",
+            "correlation_score",
+            "fetched_at",
+        ]
 
 
 class EvidenceUpdateSerializer(serializers.ModelSerializer):

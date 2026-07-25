@@ -1,5 +1,6 @@
 """Service app: the registry of instrumented services a Case can belong to
 (Section 21 ERD - SERVICE entity)."""
+
 from django.db import models
 
 

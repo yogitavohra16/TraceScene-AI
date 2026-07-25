@@ -7,18 +7,18 @@ name (see cases/serializers.py), matching the PRD's "no unused endpoint"
 rule (Appendix A) since nothing in the UI creates a Service directly.
 """
 
-
 from .models import Service
 from .serializers import ServiceSerializer
 
 
 from rest_framework import mixins, viewsets
 
+
 class ServiceViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet
+    viewsets.GenericViewSet,
 ):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer

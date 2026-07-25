@@ -7,6 +7,7 @@ call, so the demo has zero external API/network dependency during judging
 (Section 31, Section 53 talking points). The Assistant always cites the
 evidence IDs it used, matching the "explainable" product thesis.
 """
+
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.response import Response

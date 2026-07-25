@@ -7,6 +7,7 @@ renders (Section 11.4, Section 23 example response). It does not persist
 anything itself - it is recomputed on every request so it always reflects
 the latest relevance edits (Section 30's "recomputation triggers").
 """
+
 from __future__ import annotations
 
 from datetime import timedelta
@@ -19,8 +20,8 @@ class TimelineBuilder:
         self.case = case
 
     def build(self) -> dict:
-        evidence_qs = (
-            self.case.evidence.exclude(relevance="irrelevant").order_by("event_timestamp")
+        evidence_qs = self.case.evidence.exclude(relevance="irrelevant").order_by(
+            "event_timestamp"
         )
         evidence_list = list(evidence_qs)
 
@@ -59,7 +60,9 @@ class TimelineBuilder:
         bucket: list = []
 
         for entry in entries:
-            if bucket and (entry["timestamp"] - bucket[-1]["timestamp"]) <= timedelta(seconds=CLUSTER_WINDOW_SECONDS):
+            if bucket and (entry["timestamp"] - bucket[-1]["timestamp"]) <= timedelta(
+                seconds=CLUSTER_WINDOW_SECONDS
+            ):
                 bucket.append(entry)
             else:
                 if bucket:

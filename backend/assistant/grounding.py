@@ -9,6 +9,7 @@ bounds cost/latency once an LLM is wired in (Post-MVP).
 Context is capped to the top N=20 evidence items by correlation_score
 (Section 31's "common beginner mistake" to avoid: not capping context size).
 """
+
 from __future__ import annotations
 
 MAX_EVIDENCE_ITEMS = 20
@@ -22,10 +23,9 @@ class EvidenceGrounder:
         """Returns a chronological, numbered list of evidence dicts ready to
         render into a prompt (Post-MVP) or feed the rule-based responder
         (MVP)."""
-        evidence_qs = (
-            self.case.evidence.exclude(relevance="irrelevant")
-            .order_by("-correlation_score")[:MAX_EVIDENCE_ITEMS]
-        )
+        evidence_qs = self.case.evidence.exclude(relevance="irrelevant").order_by(
+            "-correlation_score"
+        )[:MAX_EVIDENCE_ITEMS]
         ordered = sorted(evidence_qs, key=lambda item: item.event_timestamp)
         return [
             {

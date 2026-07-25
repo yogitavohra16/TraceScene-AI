@@ -9,7 +9,14 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ["id", "name", "description", "created_at", "open_case_count", "closed_case_count"]
+        fields = [
+            "id",
+            "name",
+            "description",
+            "created_at",
+            "open_case_count",
+            "closed_case_count",
+        ]
 
     def get_open_case_count(self, obj):
         return obj.cases.exclude(status="closed").count()

@@ -6,6 +6,7 @@ serializer, delegate any real work to a service module, then serialize the
 response. The only "logic" that lives here is orchestration (e.g. kicking
 off the CorrelationEngine after a Case is created).
 """
+
 import django_filters
 from django.utils import timezone
 from rest_framework import filters, generics, status, viewsets
@@ -38,7 +39,10 @@ class CaseViewSet(viewsets.ModelViewSet):
     exposed as further actions/other apps' viewsets, matching Section 22."""
 
     queryset = Case.objects.select_related("service", "assigned_to").all()
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend,
+        filters.SearchFilter,
+    ]
     filterset_class = CaseFilter
     search_fields = ["title", "id"]
     http_method_names = ["get", "post", "patch", "head", "options"]

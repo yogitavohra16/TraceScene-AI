@@ -1,5 +1,6 @@
 """Shared DRF pagination class so every list endpoint in Section 22 returns
 the same envelope shape, instead of each ViewSet configuring its own."""
+
 from rest_framework.pagination import PageNumberPagination
 
 

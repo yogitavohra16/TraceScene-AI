@@ -14,6 +14,7 @@ theme repeated through Sections 29/31/32.
       0, 100,
     )
 """
+
 from __future__ import annotations
 
 from django.utils import timezone
@@ -35,8 +36,14 @@ class FindingGenerator:
         self.case = case
 
     def generate(self) -> Finding | None:
-        evidence_qs = self.case.evidence.exclude(relevance=Evidence.Relevance.IRRELEVANT)
-        relevant = list(evidence_qs.filter(relevance=Evidence.Relevance.RELEVANT).order_by("-correlation_score"))
+        evidence_qs = self.case.evidence.exclude(
+            relevance=Evidence.Relevance.IRRELEVANT
+        )
+        relevant = list(
+            evidence_qs.filter(relevance=Evidence.Relevance.RELEVANT).order_by(
+                "-correlation_score"
+            )
+        )
         scored_set = relevant or list(evidence_qs.order_by("-correlation_score")[:3])
 
         if not scored_set:
@@ -79,8 +86,13 @@ class FindingGenerator:
         types = {item.source_type for item in evidence_list}
         contents = " ".join(item.raw_content.lower() for item in evidence_list)
 
-        has_deploy_near_alert = "deploy" in types and self._deploy_precedes_alert(evidence_list)
-        has_resource_error = any(keyword in contents for keyword in RESOURCE_KEYWORDS) and "metric" in types
+        has_deploy_near_alert = "deploy" in types and self._deploy_precedes_alert(
+            evidence_list
+        )
+        has_resource_error = (
+            any(keyword in contents for keyword in RESOURCE_KEYWORDS)
+            and "metric" in types
+        )
         has_cross_service_trace = self._has_cross_service_failure(evidence_list)
         has_traffic_spike = "metric" in types and "spike" in contents
 
@@ -95,15 +107,23 @@ class FindingGenerator:
         if not deploys:
             return False
         trigger_time = self.case.created_at
-        return any((trigger_time - deploy.event_timestamp).total_seconds() < 600 for deploy in deploys)
+        return any(
+            (trigger_time - deploy.event_timestamp).total_seconds() < 600
+            for deploy in deploys
+        )
 
     def _has_cross_service_failure(self, evidence_list: list) -> bool:
         traces = [item for item in evidence_list if item.source_type == "trace"]
-        return any(item.metadata.get("service_name") not in (None, self.case.service.name) for item in traces)
+        return any(
+            item.metadata.get("service_name") not in (None, self.case.service.name)
+            for item in traces
+        )
 
     def _build_hypothesis(self, evidence_list: list) -> str:
         top = evidence_list[0]
-        deploy = next((item for item in evidence_list if item.source_type == "deploy"), None)
+        deploy = next(
+            (item for item in evidence_list if item.source_type == "deploy"), None
+        )
 
         summary = top.raw_content[:160].rstrip(".")
         if deploy:
@@ -111,6 +131,4 @@ class FindingGenerator:
                 f"This incident on {self.case.service.name} is most likely related to {summary}, "
                 f"which began shortly after a deploy at {timezone.localtime(deploy.event_timestamp).strftime('%H:%M:%S')}."
             )
-        return (
-            f"This incident on {self.case.service.name} is most likely explained by: {summary}."
-        )
+        return f"This incident on {self.case.service.name} is most likely explained by: {summary}."

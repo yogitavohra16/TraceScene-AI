@@ -14,8 +14,19 @@ SYSTEM_PROMPT = (
 )
 
 
-def build_user_prompt(case_title: str, service_name: str, trigger_summary: str, evidence: list[dict], question: str) -> str:
-    lines = [f"Case: {case_title}", f"Service: {service_name}", f"Trigger: {trigger_summary}", "Evidence (chronological):"]
+def build_user_prompt(
+    case_title: str,
+    service_name: str,
+    trigger_summary: str,
+    evidence: list[dict],
+    question: str,
+) -> str:
+    lines = [
+        f"Case: {case_title}",
+        f"Service: {service_name}",
+        f"Trigger: {trigger_summary}",
+        "Evidence (chronological):",
+    ]
     for item in evidence:
         lines.append(
             f"{item['number']}. [{item['timestamp']}] {item['source_type'].upper()} - {item['summary']} (score: {item['score']:.0f})"
